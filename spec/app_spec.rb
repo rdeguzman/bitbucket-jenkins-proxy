@@ -32,6 +32,8 @@ describe 'bitbucket-jenkins-proxy' do
     expect(json_response['branch']).to eq branch_name
 
     jenkins_url = json_response['jenkins_url']
+    puts "JENKINS_URL: #{jenkins_url}"
+
     expect( jenkins_url.to_s.include?("buildWithParameters?token") ).to be true
     expect( jenkins_url.to_s.include?("branch=#{branch_name}") ).to be true
   end

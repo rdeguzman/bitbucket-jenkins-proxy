@@ -36,11 +36,22 @@ get '/' do
   { :status => 'OK' }.to_json
 end
 
+# Use to mock tests
+get '/job/*' do
+  set_response_headers
+  content_type :json
+  { :status => 'OK' }.to_json
+end
+
 post '/build/:job' do
   set_response_headers
   content_type :json
 
   result = parse(request, jenkins_yml)
+
+  url = result[:jenkins_url]
+  open(url).read
+
   result.to_json
 end
 
