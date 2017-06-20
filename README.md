@@ -4,7 +4,12 @@
 
 	% bundle install
 	% cp jenkins.yml.template jenkins.yml
-	% ruby app.rb -o 0.0.0.0 #allows incoming connection 
+	% rerun "RACK_ENV=development ruby app.rb -o 0.0.0.0" #allows incoming connection 
+
+## Testing
+
+	% rerun "RACK_ENV=development ruby app.rb -o 0.0.0.0" # we need the server up for tests to pass
+	% RACK_ENV=test rspec .
 
 ## Apache VirtualHost
 
