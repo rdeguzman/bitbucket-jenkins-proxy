@@ -3,6 +3,7 @@
 ## Development
 
 	% bundle install
+	% cp jenkins.yml.template jenkins.yml
 	% ruby app.rb -o 0.0.0.0 #allows incoming connection 
 
 ## Apache VirtualHost
