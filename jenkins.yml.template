@@ -1,2 +1,11 @@
-host: "ciubuntu.foobar.com:8080"
-token: "secret"
+development: 
+  host: "127.0.0.1:4567"
+  token: "secret"
+
+test:
+  host: "127.0.0.1:4567"
+  token: "secret"
+
+production: 
+  host: "ci.foobar.com"
+  token: "secret"

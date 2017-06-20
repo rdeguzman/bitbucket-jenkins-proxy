@@ -2,7 +2,7 @@ require 'sinatra'
 require 'yaml'
 require "open-uri"
 
-jenkins_yml = YAML.load_file('jenkins.yml')
+jenkins_yml = YAML.load_file('jenkins.yml')[ENV['RACK_ENV']]
 
 def set_response_headers
   content_type :json
