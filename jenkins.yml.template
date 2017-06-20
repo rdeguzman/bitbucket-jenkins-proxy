@@ -1,2 +1,2 @@
-host: "ciubuntu.datalink.loc:8080"
-token: "buildme"
+host: "ciubuntu.foobar.com:8080"
+token: "secret"
