@@ -13,5 +13,6 @@ tmp/**/*
 tmp/*
 *.tmproj
 vendor
+.byebug_history
 
 jenkins.yml

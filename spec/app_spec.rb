@@ -1,3 +1,4 @@
+require 'byebug'
 require File.expand_path '../spec_helper.rb', __FILE__
 
 describe 'bitbucket-jenkins-proxy' do
