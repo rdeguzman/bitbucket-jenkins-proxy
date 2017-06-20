@@ -1,0 +1,17 @@
+.DS_Store
+.svn
+*~
+.*.swp
+
+.bundle
+.project
+db/*.sqlite3
+log/*.log
+*.log
+/tmp/
+tmp/**/*
+tmp/*
+*.tmproj
+vendor
+
+jenkins.yml
