@@ -53,6 +53,7 @@ post '/build' do
   result = parse(request, jenkins_yml)
 
   url = result[:jenkins_url]
+  logger.info("JENKINS: #{url}")
   open(url).read
 
   result.to_json
