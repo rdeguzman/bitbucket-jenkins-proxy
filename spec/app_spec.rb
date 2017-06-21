@@ -83,4 +83,22 @@ describe 'bitbucket-jenkins-proxy' do
     expect(json_response['job']).to eq 'proxy-test'
   end
 
+  it 'repo:scrap branch: develop => jenkins: proxy-test' do
+    payload = set_branch(bitbucket_json, 'develop')
+
+    post "/build", payload.to_json, {'CONTENT_TYPE' => 'application/json'} 
+
+    json_response = JSON.parse(last_response.body)
+    expect(json_response['job']).to eq 'proxy-test'
+  end
+
+  it 'repo:scrap branch: master => jenkins: proxy-staging' do
+    payload = set_branch(bitbucket_json, 'master')
+
+    post "/build", payload.to_json, {'CONTENT_TYPE' => 'application/json'} 
+
+    json_response = JSON.parse(last_response.body)
+    expect(json_response['job']).to eq 'proxy-staging'
+  end
+
 end
