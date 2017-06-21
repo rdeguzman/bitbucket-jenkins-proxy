@@ -4,7 +4,23 @@
 
 	% bundle install
 	% cp jenkins.yml.template jenkins.yml
+	% cp rules.json.template rules.json
 	% rerun "RACK_ENV=development ruby app.rb -o 0.0.0.0" #allows incoming connection 
+
+## Rules DSL
+
+	{
+		"repo1": {
+		    "master": "repo1-staging",
+		    "develop": "repo1-test",
+		    "default": "repo1-test"
+		},
+		"repo2": {
+		    "master": "repo2-uat",
+		    "develop": "repo2-test",
+		    "default": "repo2-test"
+		}
+	}
 
 ## Testing
 

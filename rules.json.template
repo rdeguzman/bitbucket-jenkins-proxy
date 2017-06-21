@@ -1,0 +1,12 @@
+{
+  "repo1": {
+      "master": "repo1-staging",
+      "develop": "repo1-test",
+      "default": "repo1-test"
+  },
+  "repo2": {
+      "master": "repo2-uat",
+      "develop": "repo2-test",
+      "default": "repo2-test"
+  }
+}

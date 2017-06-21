@@ -16,3 +16,4 @@ vendor
 .byebug_history
 
 jenkins.yml
+rules.json
