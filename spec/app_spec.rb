@@ -5,6 +5,11 @@ describe 'bitbucket-jenkins-proxy' do
 
   bitbucket_json = JSON.parse(File.read("spec/sample.json"))
 
+  def set_branch(payload, name)
+    payload["push"]["changes"].first["new"]["name"] = name
+    return payload
+  end
+
   # https://confluence.atlassian.com/bitbucket/event-payloads-740262817.html#EventPayloads-Push
   it 'sample.json should contain type:branch and name:name-of-branch' do
     new = bitbucket_json["push"]["changes"].first["new"]
@@ -67,6 +72,15 @@ describe 'bitbucket-jenkins-proxy' do
 
     expect( jenkins_url.to_s.include?("buildWithParameters?token=secret") ).to be true
     expect( jenkins_url.to_s.include?("branch=DFMS-XXX") ).to be true
+  end
+
+  it 'repo:scrap branch: DFMS-123 => jenkins: proxy-test' do
+    payload = set_branch(bitbucket_json, 'DFMS-123')
+
+    post "/build", payload.to_json, {'CONTENT_TYPE' => 'application/json'} 
+
+    json_response = JSON.parse(last_response.body)
+    expect(json_response['job']).to eq 'proxy-test'
   end
 
 end

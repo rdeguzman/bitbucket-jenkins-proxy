@@ -3,6 +3,7 @@ require 'yaml'
 require "open-uri"
 
 jenkins_yml = YAML.load_file('jenkins.yml')[ENV['RACK_ENV']]
+rules_json = JSON.parse(open("rules.json").read)
 
 def set_response_headers
   content_type :json
@@ -12,7 +13,15 @@ def set_response_headers
           'Access-Control-Allow-Methods' => ['OPTIONS', 'GET', 'POST']
 end
 
-def parse(req, jenkins)
+def get_jenkins_job(rules, repo, branch)
+  job_name = rules[repo][branch]
+  if job_name.nil?
+    job_name = rules[repo]["default"]
+  end
+  return job_name
+end
+
+def parse(req, jenkins, rules)
   payload = JSON.parse( req.body.read )
 
   new = payload["push"]["changes"].first["new"]
@@ -21,7 +30,7 @@ def parse(req, jenkins)
 
   result = {}
   result[:branch]     = branch
-  result[:job]        = params[:job] 
+  result[:job]        = get_jenkins_job(rules, repo, branch)
   result[:repository] = repo 
   result[:jenkins] = jenkins
 
@@ -50,7 +59,7 @@ post '/build' do
   set_response_headers
   content_type :json
 
-  result = parse(request, jenkins_yml)
+  result = parse(request, jenkins_yml, rules_json)
 
   url = result[:jenkins_url]
   logger.info("JENKINS: #{url}")
