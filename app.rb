@@ -69,7 +69,7 @@ post '/build' do
 
   result = parse(request, jenkins_yml, rules_json)
 
-  if result[:status] == "OK"
+  if result[:status]
     url = result[:jenkins_url]
     logger.info("JENKINS: #{url}")
     open(url).read
