@@ -21,6 +21,10 @@ def get_jenkins_job(rules, repo, branch)
   return job_name
 end
 
+def repo_exists_in_rules?(rules, repo)
+  return !rules[repo].nil?
+end
+
 def parse(req, jenkins, rules)
   payload = JSON.parse( req.body.read )
 
@@ -30,14 +34,18 @@ def parse(req, jenkins, rules)
 
   result = {}
   result[:branch]     = branch
-  result[:job]        = get_jenkins_job(rules, repo, branch)
+  result[:jenkins]    = jenkins
   result[:repository] = repo 
-  result[:jenkins] = jenkins
 
-  token = jenkins['token']
-  
+  if repo_exists_in_rules?(rules, repo)
+    result[:job]        = get_jenkins_job(rules, repo, branch)
+    result[:status]     = !result[:job].nil?
+  else
+    result[:status]     = false
+  end
+
   #JENKINS_URL/job/proxy-test/buildWithParameters?token=TOKEN_NAME&branch=foobar
-  result[:jenkins_url] = "http://#{jenkins['host']}/job/#{result[:job]}/buildWithParameters?token=#{token}&branch=#{branch}"
+  result[:jenkins_url] = "http://#{jenkins['host']}/job/#{result[:job]}/buildWithParameters?token=#{jenkins['token']}&branch=#{branch}"
 
   return result
 end
@@ -61,9 +69,11 @@ post '/build' do
 
   result = parse(request, jenkins_yml, rules_json)
 
-  url = result[:jenkins_url]
-  logger.info("JENKINS: #{url}")
-  open(url).read
+  if result[:status] == "OK"
+    url = result[:jenkins_url]
+    logger.info("JENKINS: #{url}")
+    open(url).read
+  end
 
   result.to_json
 end
