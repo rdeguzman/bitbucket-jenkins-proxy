@@ -54,9 +54,3 @@ post '/build/:job' do
 
   result.to_json
 end
-
-post '/proxy/:job' do
-  result = parse(request, jenkins_yml)
-  logger.info("redirect to: #{result[:jenkins_url]}")
-  open( result[:jenkins_url] ).read
-end
