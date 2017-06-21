@@ -14,12 +14,15 @@ end
 
 def parse(req, jenkins)
   payload = JSON.parse( req.body.read )
+
   new = payload["push"]["changes"].first["new"]
   branch = new["name"]
+  repo = payload["repository"]["name"]
 
   result = {}
-  result[:branch]  = branch
-  result[:job]     = params[:job] 
+  result[:branch]     = branch
+  result[:job]        = params[:job] 
+  result[:repository] = repo 
   result[:jenkins] = jenkins
 
   token = jenkins['token']

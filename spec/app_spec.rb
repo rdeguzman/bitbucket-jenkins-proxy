@@ -32,6 +32,17 @@ describe 'bitbucket-jenkins-proxy' do
     expect(json_response['branch']).to eq branch_name
   end
 
+  it 'post /build returns { repository: "" }' do
+    post "/build", bitbucket_json.to_json, {'CONTENT_TYPE' => 'application/json'} 
+
+    json_response = JSON.parse(last_response.body)
+
+    repo = bitbucket_json["repository"]["name"]
+
+    expect(json_response.has_key? 'repository').to be true
+    expect(json_response['repository']).to eq repo
+  end
+
   it 'post /build returns { .., jenkins: { host: "", token: "" } }' do
     post "/build", bitbucket_json.to_json, {'CONTENT_TYPE' => 'application/json'} 
 
