@@ -27,6 +27,11 @@
 	% rerun "RACK_ENV=development ruby app.rb -o 0.0.0.0" # we need the server up for tests to pass
 	% RACK_ENV=test rspec .
 
+## Production
+
+	% gem install -V bundler
+	% bundle install --verbose --deployment --without development test
+
 ## Apache VirtualHost
 
 	<VirtualHost *:80>
