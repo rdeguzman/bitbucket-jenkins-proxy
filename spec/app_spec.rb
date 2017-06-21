@@ -15,8 +15,8 @@ describe 'bitbucket-jenkins-proxy' do
     expect(name).to eq 'name-of-branch'
   end
 
-  it 'post /build/sample-job' do
-    post "/build/sample-job", bitbucket_json.to_json, {'CONTENT_TYPE' => 'application/json'} 
+  it 'post /build' do
+    post "/build", bitbucket_json.to_json, {'CONTENT_TYPE' => 'application/json'} 
 
     new = bitbucket_json["push"]["changes"].first["new"]
     branch_name = new["name"]

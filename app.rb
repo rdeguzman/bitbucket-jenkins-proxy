@@ -43,7 +43,7 @@ get '/job/*' do
   { :status => 'OK' }.to_json
 end
 
-post '/build/:job' do
+post '/build' do
   set_response_headers
   content_type :json
 
