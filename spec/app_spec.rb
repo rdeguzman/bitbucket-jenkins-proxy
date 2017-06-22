@@ -14,6 +14,11 @@ describe 'bitbucket-jenkins-proxy' do
     return p
   end
 
+  def set_message(p, msg)
+    p["push"]["changes"].first["new"]["target"]["message"] = msg
+    return p
+  end
+
   before(:each) do
     @bitbucket_json = JSON.parse(File.read("spec/sample.json"))
   end
@@ -132,4 +137,13 @@ describe 'bitbucket-jenkins-proxy' do
     expect(json_response['status']).to eq false
   end
 
+  it 'repo:scrap branch: build message: @@@build-version 123 do not call jenkins' do
+    payload = set_branch(@bitbucket_json, 'build')
+    payload = set_message(@bitbucket_json, '@@@build-version')
+
+    post "/build", payload.to_json, {'CONTENT_TYPE' => 'application/json'} 
+
+    json_response = JSON.parse(last_response.body)
+    expect(json_response['status']).to eq false
+  end
 end

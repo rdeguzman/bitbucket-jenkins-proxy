@@ -20,7 +20,7 @@ def get_jenkins_job(rules, repo, branch, message)
   end
 
   # Avoid infinite-loop in branch: build pipeline by checking message
-  if message and message.includes?("@@@build-version")
+  if message and message.start_with?("@@@build-version")
     job_name = nil
   end
 
@@ -38,7 +38,7 @@ def parse(req, jenkins, rules)
   branch = new["name"]
   type = new["type"]
   repo = payload["repository"]["name"]
-  message = new["message"]
+  message = new["target"]["message"]
 
   result = {}
   result[:branch]     = branch
