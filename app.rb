@@ -13,11 +13,17 @@ def set_response_headers
           'Access-Control-Allow-Methods' => ['OPTIONS', 'GET', 'POST']
 end
 
-def get_jenkins_job(rules, repo, branch)
+def get_jenkins_job(rules, repo, branch, message)
   job_name = rules[repo][branch]
   if job_name.nil?
     job_name = rules[repo]["default"]
   end
+
+  # Avoid infinite-loop in branch: build pipeline by checking message
+  if message and message.includes?("@@@build-version")
+    job_name = nil
+  end
+
   return job_name
 end
 
@@ -30,15 +36,19 @@ def parse(req, jenkins, rules)
 
   new = payload["push"]["changes"].first["new"]
   branch = new["name"]
+  type = new["type"]
   repo = payload["repository"]["name"]
+  message = new["message"]
 
   result = {}
   result[:branch]     = branch
   result[:jenkins]    = jenkins
   result[:repository] = repo 
 
-  if repo_exists_in_rules?(rules, repo)
-    result[:job]        = get_jenkins_job(rules, repo, branch)
+  if type == "tag"
+    result[:status]     = false
+  elsif repo_exists_in_rules?(rules, repo)
+    result[:job]        = get_jenkins_job(rules, repo, branch, message)
     result[:status]     = !result[:job].nil?
   else
     result[:status]     = false
