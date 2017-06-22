@@ -21,7 +21,9 @@ def get_jenkins_job(rules, repo, branch, message)
 
   # Avoid infinite-loop in branch: build pipeline by checking message
   if message and message.start_with?("@@@build-version")
-    job_name = nil
+    if branch == "build"
+      job_name = nil
+    end
   end
 
   return job_name
